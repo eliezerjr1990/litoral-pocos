@@ -44,9 +44,12 @@ export default function Footer() {
           >
             <h3 className="text-lg font-bold mb-4">Setor de Contatos</h3>
             <div className="space-y-2 text-blue-100 text-sm">
-              <p><strong>Atendimento Principal:</strong> (41) 98437-8485 (Eliezer)</p>
-              <p><strong>Agendamentos:</strong> (41) 99867-0421 (Anthonnelly)</p>
-              <p><strong>Técnico Perfurador:</strong> (41) 95072-8510 (Luiz Antonio)</p>
+              <p><strong>ATENDIMENTO PRINCIPAL</strong></p>
+              <p>(41) 98437-8485 (Eliezer)</p>
+              <p className="mt-3"><strong>AGENDAMENTOS</strong></p>
+              <p>(41) 99867-0421 (Anthonnelly)</p>
+              <p className="mt-3"><strong>TÉCNICO PERFURADOR</strong></p>
+              <p>(41) 95072-8510 (Luiz Antonio)</p>
             </div>
           </motion.div>
         </div>
