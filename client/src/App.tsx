@@ -9,7 +9,7 @@ import FAQ from "./pages/FAQ";
 import Videos from "./pages/Videos";
 import Navigation from "./components/Navigation";
 import WhatsAppFloatingButton from "./components/WhatsAppFloatingButton";
-import Footer from "./components/Footer";
+import FooterNew from "./components/FooterNew";
 
 
 function Router() {
@@ -24,7 +24,7 @@ function Router() {
         {/* Final fallback route */}
         <Route component={NotFound} />
       </Switch>
-      <Footer />
+      <FooterNew />
     </>
   );
 }
