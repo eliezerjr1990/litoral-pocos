@@ -6,7 +6,28 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Litoral Poços - Modernizado</title>    
+    <title>Litoral Poços - Modernizado</title>
+    <script>
+      // Remover elemento flutuante de contador assim que a página carregar
+      function removeFloatingCounter() {
+        const allElements = document.querySelectorAll('*');
+        for (let el of allElements) {
+          // Procurar por elemento com "Visitas" que não está no footer
+          if (el.textContent && el.textContent.includes('Visitas:') && el.closest('footer') === null) {
+            // Verificar se tem posição fixed
+            const style = window.getComputedStyle(el);
+            if (style.position === 'fixed') {
+              el.remove();
+            }
+          }
+        }
+      }
+      // Executar quando o DOM estiver pronto
+      document.addEventListener('DOMContentLoaded', removeFloatingCounter);
+      // Executar também após um pequeno delay para pegar elementos injetados depois
+      setTimeout(removeFloatingCounter, 500);
+      setTimeout(removeFloatingCounter, 1000);
+    </script>    
     <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,10 +38,7 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+
   </body>
 
 </html>

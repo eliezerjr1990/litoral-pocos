@@ -7,8 +7,9 @@ import { motion } from "framer-motion";
 const COMPANY_NAME = "Litoral Poços";
 const COMPANY_WHATSAPP = "5541998670421";
 const CONTACT_NUMBERS = {
-  main: "5541984378485", // Principal
-  scheduling: "5541998670421" // Anthonnelly (Agendamentos)
+  main: "5541984378485", // Principal - Eliezer
+  scheduling: "5541998670421", // Anthonnelly (Agendamentos)
+  technician: "5541995072851" // Luiz Antonio (Técnico Perfurador)
 };
 
 export default function Navigation() {
@@ -19,6 +20,7 @@ export default function Navigation() {
 
   const navItems = [
     { label: "Início", href: "/" },
+    { label: "Vídeos", href: "/videos" },
     { label: "FAQ", href: "/faq" },
     { label: "Contato", href: "#contact" },
   ];

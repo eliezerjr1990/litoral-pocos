@@ -1001,6 +1001,67 @@ TOTAL: R$ ${estimatedPrice.toLocaleString('pt-BR')}`;
         </div>
       </section>
 
+      {/* Contact Section */}
+      <section id="contact" className="py-16 bg-gradient-to-br from-blue-50 to-orange-50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
+              Setor de Contatos
+            </h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Entre em contato conosco através dos números abaixo
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                title: "Atendimento Principal",
+                phone: "(41) 98437-8485",
+                name: "Eliezer",
+                icon: "📞"
+              },
+              {
+                title: "Agendamentos",
+                phone: "(41) 99867-0421",
+                name: "Anthonnelly",
+                icon: "📅"
+              },
+              {
+                title: "Técnico Perfurador",
+                phone: "(41) 95072-851",
+                name: "Luiz Antonio",
+                icon: "🔧"
+              }
+            ].map((contact, i) => (
+              <motion.a
+                key={i}
+                href={`https://wa.me/55${contact.phone.replace(/\D/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-gray-100 flex flex-col items-center text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                whileHover={{ y: -10 }}
+              >
+                <div className="text-4xl mb-4">{contact.icon}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{contact.title}</h3>
+                <p className="text-blue-600 font-bold text-lg mb-2">{contact.phone}</p>
+                <p className="text-gray-600 text-sm">{contact.name}</p>
+              </motion.a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <Testimonials />
     </div>
