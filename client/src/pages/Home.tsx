@@ -62,6 +62,7 @@ export default function Home() {
   const [loadingCep, setLoadingCep] = useState(false);
   const [cepError, setCepError] = useState("");
   const [motorType, setMotorType] = useState("");
+  const [motorVoltage, setMotorVoltage] = useState("110");
   const [paymentLink, setPaymentLink] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"creditCard" | "debitCard" | "cash" | "pix" | "paymentLink" | null>(null);
   const [qrCodeImage, setQrCodeImage] = useState<string | null>(null);
@@ -77,82 +78,116 @@ export default function Home() {
     refilFiltro: false
   });
 
-  // Tabela de preços unificada
+  // Tabela de preços oficial (valores recebidos em 03/09/2026).
+  // A perfuração possui preço fechado para cada faixa de profundidade.
   const PRICES: Record<string, Record<string, number>> = {
-    perfuracao: {
+    perfuracao12: {
       paranagua: 600,
+      valadares: 650,
       pontal: 750,
       matinhos: 750,
       guaratuba: 1250,
+      ilhas: 2000,
+    },
+    perfuracao18: {
+      paranagua: 900,
+      valadares: 950,
+      pontal: 1050,
+      matinhos: 1050,
+      guaratuba: 1250,
+      ilhas: 2300,
     },
     manutencao: {
-      paranagua: 300,
+      paranagua: 250,
+      valadares: 350,
       pontal: 400,
       matinhos: 400,
-      guaratuba: 600,
+      guaratuba: 800,
+      ilhas: 950,
     },
     motorCasa: {
       paranagua: 500,
+      valadares: 500,
       pontal: 500,
       matinhos: 500,
       guaratuba: 500,
+      ilhas: 500,
     },
     motorSobrado: {
       paranagua: 600,
+      valadares: 600,
       pontal: 600,
       matinhos: 600,
       guaratuba: 600,
+      ilhas: 600,
     },
     filtro: {
       paranagua: 250,
+      valadares: 250,
       pontal: 250,
       matinhos: 250,
       guaratuba: 250,
+      ilhas: 250,
     },
     pressurizador: {
       paranagua: 650,
+      valadares: 650,
       pontal: 650,
       matinhos: 650,
       guaratuba: 650,
+      ilhas: 650,
     },
     valvula: {
       paranagua: 150,
+      valadares: 150,
       pontal: 150,
       matinhos: 150,
       guaratuba: 150,
+      ilhas: 150,
     },
+    // Motores Claw em 110 V, conforme a tabela publicada.
     motor05: {
       paranagua: 650,
+      valadares: 650,
       pontal: 650,
       matinhos: 650,
       guaratuba: 650,
+      ilhas: 650,
     },
     motor08: {
+      paranagua: 950,
+      valadares: 950,
+      pontal: 950,
+      matinhos: 950,
+      guaratuba: 950,
+      ilhas: 950,
+    },
+    motor15: {
       paranagua: 1050,
+      valadares: 1050,
       pontal: 1050,
       matinhos: 1050,
       guaratuba: 1050,
+      ilhas: 1050,
     },
-    motor15: {
-      paranagua: 1350,
-      pontal: 1350,
-      matinhos: 1350,
-      guaratuba: 1350,
-    },
+    motor05_220: { paranagua: 750, valadares: 750, pontal: 750, matinhos: 750, guaratuba: 750, ilhas: 750 },
+    motor08_220: { paranagua: 1050, valadares: 1050, pontal: 1050, matinhos: 1050, guaratuba: 1050, ilhas: 1050 },
+    motor15_220: { paranagua: 1150, valadares: 1150, pontal: 1150, matinhos: 1150, guaratuba: 1150, ilhas: 1150 },
     refilFiltro: {
       paranagua: 100,
+      valadares: 100,
       pontal: 100,
       matinhos: 100,
       guaratuba: 100,
+      ilhas: 100,
     }
   };
 
-  const basePrice = PRICES[serviceType]?.[city] || 0;
-  
-  // Apenas perfuração tem custo adicional por profundidade acima de 12m
-  const depthPrice = serviceType === "perfuracao" && depth > 12 
-    ? (depth - 12) * 50 
-    : 0;
+  const priceTable = serviceType === "perfuracao"
+    ? (depth <= 12 ? "perfuracao12" : "perfuracao18")
+    : serviceType;
+  const basePrice = PRICES[priceTable]?.[city] || 0;
+  const depthPrice = 0;
 
   // Soma dos extras
   const extrasPrice = Object.entries(extras).reduce((total, [key, isSelected]) => {
@@ -168,7 +203,7 @@ export default function Home() {
     "0.8": "motor08",
     "1.5": "motor15"
   };
-  const motorKey = motorType ? motorKeyMap[motorType] : "";
+  const motorKey = motorType ? `${motorKeyMap[motorType]}${motorVoltage === "220" ? "_220" : ""}` : "";
   const motorPrice = motorKey ? (PRICES[motorKey]?.[city] || 0) : 0;
     
   const estimatedPrice = basePrice + depthPrice + extrasPrice + motorPrice;
@@ -286,6 +321,8 @@ export default function Home() {
       pontal: "Pontal do Parana",
       matinhos: "Matinhos",
       guaratuba: "Guaratuba",
+      ilhas: "Ilhas",
+      valadares: "Valadares",
     }[city];
 
     // Construir relatorio detalhado com todos os itens
@@ -557,9 +594,11 @@ TOTAL: R$ ${estimatedPrice.toLocaleString('pt-BR')}`;
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="paranagua">Paranaguá</option>
+                      <option value="valadares">Valadares</option>
                       <option value="pontal">Pontal do Paraná</option>
                       <option value="matinhos">Matinhos</option>
                       <option value="guaratuba">Guaratuba</option>
+                      <option value="ilhas">Ilhas</option>
                     </select>
                   </div>
 
@@ -582,8 +621,8 @@ TOTAL: R$ ${estimatedPrice.toLocaleString('pt-BR')}`;
                         />
                         <div className="flex justify-between text-xs text-gray-500 mt-2">
                           <span>6m</span>
-                          <span>12m</span>
-                          <span>18m</span>
+                          <span>12m (R$ 600 a R$ 2.000)</span>
+                          <span>18m (R$ 900 a R$ 2.300)</span>
                         </div>
                       </motion.div>
                     )}
@@ -645,6 +684,10 @@ TOTAL: R$ ${estimatedPrice.toLocaleString('pt-BR')}`;
 
                     <div className="border-t border-gray-200 pt-3 mt-3">
                       <p className="text-xs font-semibold text-gray-700 mb-2">Motor Claw</p>
+                      <select value={motorVoltage} onChange={(e) => setMotorVoltage(e.target.value)} className="w-full px-2 py-1 text-xs border rounded mb-2">
+                        <option value="110">110 V</option>
+                        <option value="220">220 V</option>
+                      </select>
                       <div className="space-y-2">
                         <label className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors cursor-pointer">
                           <input
@@ -668,7 +711,7 @@ TOTAL: R$ ${estimatedPrice.toLocaleString('pt-BR')}`;
                           />
                           <div className="flex-grow min-w-0">
                             <p className="text-xs font-semibold">Motor 0,5HP</p>
-                            <p className="text-xs text-gray-500">R$ 650 (1 ano)</p>
+                            <p className="text-xs text-gray-500">R$ {PRICES[`${motorKeyMap["0.5"]}${motorVoltage === "220" ? "_220" : ""}`]?.[city]} ({motorVoltage} V, 1 ano)</p>
                           </div>
                         </label>
                         <label className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors cursor-pointer">
@@ -682,7 +725,7 @@ TOTAL: R$ ${estimatedPrice.toLocaleString('pt-BR')}`;
                           />
                           <div className="flex-grow min-w-0">
                             <p className="text-xs font-semibold">Motor 0,8HP</p>
-                            <p className="text-xs text-gray-500">R$ 1.050 (2 anos)</p>
+                            <p className="text-xs text-gray-500">R$ {PRICES[`${motorKeyMap["0.8"]}${motorVoltage === "220" ? "_220" : ""}`]?.[city]} ({motorVoltage} V, 2 anos)</p>
                           </div>
                         </label>
                         <label className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors cursor-pointer">
@@ -696,7 +739,7 @@ TOTAL: R$ ${estimatedPrice.toLocaleString('pt-BR')}`;
                           />
                           <div className="flex-grow min-w-0">
                             <p className="text-xs font-semibold">Motor 1,5HP</p>
-                            <p className="text-xs text-gray-500">R$ 1.350 (2 anos)</p>
+                            <p className="text-xs text-gray-500">R$ {PRICES[`${motorKeyMap["1.5"]}${motorVoltage === "220" ? "_220" : ""}`]?.[city]} ({motorVoltage} V, 2 anos)</p>
                           </div>
                         </label>
                       </div>
